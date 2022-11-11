@@ -1,6 +1,10 @@
+import Form from './components/Form'
+
 function App() {
   return (
-    <h1>Hello from App</h1>
+    <div>
+      <Form />
+    </div>
   );
 }
 
