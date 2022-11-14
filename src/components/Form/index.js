@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import validator from 'validator';
+import { phone as phoneValidator} from 'phone';
 
 const Form = () => {
   const [name, setName] = useState('');
@@ -8,15 +10,68 @@ const Form = () => {
   const [staff, setStaff] = useState('');
   const [bio, setBio] = useState('');
   const [notes, setNotes] = useState('');
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  const onSubmit = () => {
-    return null;
+  const [validationErrors, setValidationErrors] = useState([]);
+
+  useEffect(() => {
+    const errors = [];
+
+    if (name.length < 1) {
+      errors.push('Please enter your name');
+    }
+
+    if (!validator.isEmail(email)) {
+      errors.push('Please enter a valid email address');
+    }
+
+    if (!phoneValidator(phone).isValid) {
+      errors.push('Please enter a valid phone number');
+    }
+
+    if (phone.length && phoneType == 'disabled') {
+      errors.push('Please chose a valid phone type');
+    }
+
+    if (bio.length > 280) {
+      errors.push('Bio must be less than 280 characters')
+    }
+
+    setValidationErrors(errors);
+  }, [name, email, phone, phoneType, bio]);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    setHasSubmitted(true);
+    if (validationErrors.length > 0) {
+      return alert('Cannot submit due to errors');
+
+    }
+    
+    /* TO ADD: refresh/clear all fields */
+    setValidationErrors([]);
+    setHasSubmitted(false);
+
   }
 
   return (
     <div>
       <h2>Form element</h2>
       <form onSubmit={onSubmit}>
+        {validationErrors.length > 0
+          && hasSubmitted
+          && (
+            <div>
+              Errors when attempting to submit form:
+              <ul>
+                {
+                  validationErrors.map(error =>
+                    <li key={error}>{error}</li>
+                  )}
+              </ul>
+            </div>
+          )}
         <div>
           <label
             htmlFor='name'
@@ -51,7 +106,7 @@ const Form = () => {
             onChange={e => setPhoneType(e.target.value)}
             value={phoneType}
           >
-            <option value='' disabled>Select phone type:</option>
+            <option value='disabled'>Select phone type:</option>
             <option value='home'>Home</option>
             <option value='work'>Work</option>
             <option value='mobile'>Mobile</option>
@@ -115,6 +170,8 @@ const Form = () => {
         </div>
 
         {/* NEED TO FIGURE OUT HOW TO CONNECT THESE WITH THE HOOK */}
+        
+        <button>Submit</button>
 
         <div></div>
 
