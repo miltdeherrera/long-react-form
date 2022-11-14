@@ -48,8 +48,27 @@ const Form = () => {
       return alert('Cannot submit due to errors');
 
     }
+
+    const formFieldsObject = {
+      name,
+      email,
+      phone,
+      phoneType,
+      staff,
+      bio,
+      notes,
+      submittedOn: new Date()
+    };
     
     /* TO ADD: refresh/clear all fields */
+    console.log(formFieldsObject);
+    setName('');
+    setEmail('');
+    setPhone('');
+    setPhoneType('');
+    setStaff('');
+    setBio('');
+    setNotes('');
     setValidationErrors([]);
     setHasSubmitted(false);
 
@@ -161,7 +180,7 @@ const Form = () => {
             type='checkbox'
             id='notifications'
             name='notifications'
-            onChange={e => setNotes(e.target.value)}
+            onClick={e => setNotes(this.state.active)}
             value={notes}
           />
           <label
@@ -181,3 +200,18 @@ const Form = () => {
 }
 
 export default Form;
+
+
+// To do:
+// Disable the phoneType dropdown menu if the Phone field is empty
+// Add a placeholder to show the proper format for inputting a phone number
+// On submit, make sure the phoneType is blank in your JSON object if no phone is given (even if there is a phoneType selected)
+// Highlight fields that fail validation in red
+// Associate each error message with its field on the form instead of printing them all at the top
+// Render errors without shifting the form fields up or down
+// Hint: Reserve space for the error messages even when they are not present
+// After a user has submitted a form with errors, validate the updates on keystroke instead of waiting for submit so the errors clear as soon as they are fixed
+// If you have accomplished all of the above, your Form component has likely grown quite large. It also probably has some repeated lines of code. Remember that shorter, more modular code that does not repeat itself is easier to understand and maintain. With that in mind, refactor your code to clean up your Form component! In particular, look to see if any code blocks could be refactored into their own React components.
+// Suggestion: Consider rendering each input type (text, select, textarea, radio, checkbox) as a React component. To help keep your code manageable and modularized, define each new component in its own file.
+// Try adding the validations to their respective input components. (You will need to create separate validation functions for each field.)
+// Add CSS styling
